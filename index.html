@@ -16,8 +16,10 @@
   --radius:14px;--sidebar:260px;
   --font:'Cairo',sans-serif;
 }
-*{box-sizing:border-box;margin:0;padding:0;font-family:var(--font)}
-body{background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column}
+*{box-sizing:border-box;margin:0;padding:0;font-family:var(--font);-webkit-tap-highlight-color:transparent}
+html{height:100%}
+body{background:var(--bg);color:var(--text);height:100vh;height:100dvh;overflow:hidden;display:flex;flex-direction:column;-webkit-text-size-adjust:100%;touch-action:manipulation}
+button,.nav-item,.ibtn,.admin-tab,.auth-tab,.btn{touch-action:manipulation;-webkit-user-select:none;user-select:none}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -98,7 +100,7 @@ body{background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display
 .shortcode-btn:hover{border-color:var(--accent);background:rgba(99,102,241,.08);color:var(--accent)}
 
 /* ===== MAIN LAYOUT ===== */
-#app{display:none;height:100vh;flex-direction:column}
+#app{display:none;height:100vh;height:100dvh;flex-direction:column}
 #app.on{display:flex}
 .topbar{
   height:58px;background:var(--bg2);border-bottom:1px solid var(--border);
@@ -198,8 +200,10 @@ tbody tr:hover{background:rgba(255,255,255,.025)}
 tbody td{padding:10px 13px;font-size:.82rem;vertical-align:middle}
 
 /* CHAT */
-.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 200px);background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 200px);height:calc(100dvh - 200px);background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
 .chat-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;background:var(--bg3)}
+.chat-back-btn{display:none;width:32px;height:32px;flex-shrink:0;border:none;background:rgba(255,255,255,.06);color:var(--text);border-radius:9px;font-size:1.1rem;cursor:pointer;align-items:center;justify-content:center}
+@media(max-width:768px){.chat-back-btn{display:flex}}
 .chat-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0;overflow:hidden;position:relative}
 .chat-av img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
 .chat-status{width:10px;height:10px;border-radius:50%;background:var(--accent2);border:2px solid var(--bg2);position:absolute;bottom:0;right:0}
@@ -267,7 +271,7 @@ tbody td{padding:10px 13px;font-size:.82rem;vertical-align:middle}
 #toast.i{border-color:var(--info)}
 
 /* CONFIRM */
-#confirm-over{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:none;justify-content:center;align-items:center;z-index:9000;padding:16px}
+#confirm-over{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:none;justify-content:center;align-items:center;z-index:99999;padding:16px}
 #confirm-over.on{display:flex}
 .confirm-box{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:26px;max-width:360px;width:100%;text-align:center;animation:popIn .3s}
 .confirm-icon{font-size:2.2rem;margin-bottom:10px}
@@ -305,10 +309,28 @@ tbody td{padding:10px 13px;font-size:.82rem;vertical-align:middle}
   .frow.c2,.frow.c3{grid-template-columns:1fr}
   .modal{margin:10px;padding:20px}
   .notif-panel{width:calc(100vw - 28px);right:14px}
-  .chat-wrap{height:calc(100vh - 160px)}
+  .chat-wrap{height:calc(100vh - 160px);height:calc(100dvh - 160px)}
   table{font-size:.76rem}
   table thead th,table tbody td{padding:7px 9px}
+  /* Prevent iOS auto-zoom on focus: inputs need >=16px on mobile */
+  .fg input,.fg select,.fg textarea,.chat-input,#sc-code,input,select,textarea{font-size:16px}
+  /* Bigger touch targets */
+  .ibtn{width:38px;height:38px}
+  .nav-item{padding:11px 14px;font-size:.88rem}
+  .btn-auth{padding:14px}
+  .send-btn,.chat-tool-btn{min-width:38px;min-height:38px}
+  .admin-tab{padding:9px 14px;font-size:.8rem}
+  .auth-card{max-height:92dvh;overflow-y:auto;padding:24px 20px}
+  .confirm-box{max-width:92vw;padding:22px}
+  .confirm-btns{flex-direction:column}
+  .confirm-btns .btn{width:100%}
 }
+@media(max-width:380px){
+  .auth-card{padding:18px 14px}
+  .fg-row{grid-template-columns:1fr}
+}
+/* Allow vertical scroll on short screens for the auth card */
+#auth-screen{overflow-y:auto}
 
 /* ADMIN TABS */
 .admin-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px;background:var(--bg3);padding:6px;border-radius:12px;border:1px solid var(--border)}
@@ -362,8 +384,17 @@ tbody td{padding:10px 13px;font-size:.82rem;vertical-align:middle}
 .online-dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);display:inline-block;margin-left:5px;flex-shrink:0}
 
 /* SCROLLABLE TAB CONTENT */
-#admin-tab-users,#admin-tab-students-reg,#admin-tab-projects,#admin-tab-messages,#admin-tab-activity,#admin-tab-support,#admin-tab-broadcast,#admin-tab-admins,#admin-tab-maintenance{display:none}
+#admin-tab-users,#admin-tab-students-reg,#admin-tab-devices,#admin-tab-projects,#admin-tab-messages,#admin-tab-activity,#admin-tab-support,#admin-tab-broadcast,#admin-tab-admins,#admin-tab-maintenance{display:none}
 #admin-tab-users{display:block}
+
+/* SPLIT CHAT GRID (admin-chat / teacher-chat list + conversation) */
+.split-chat-grid{display:grid;grid-template-columns:260px 1fr;gap:12px;height:calc(100vh - 140px);height:calc(100dvh - 140px)}
+@media(max-width:768px){
+  .split-chat-grid{grid-template-columns:1fr;height:calc(100vh - 120px);height:calc(100dvh - 120px)}
+  .split-chat-grid .card:first-child{display:none}
+  .split-chat-grid.show-list .card:first-child{display:flex;flex-direction:column}
+  .split-chat-grid.show-list #admin-chat-main,.split-chat-grid.show-list #teacher-chat-main{display:none}
+}
 </style>
 </head>
 <body>
@@ -617,7 +648,7 @@ tbody td{padding:10px 13px;font-size:.82rem;vertical-align:middle}
 
       <!-- ======= TEACHER CHAT ======= -->
       <div class="view" id="v-teacher-chat">
-        <div style="display:grid;grid-template-columns:260px 1fr;gap:12px;height:calc(100vh - 140px)">
+        <div class="split-chat-grid show-list" id="teacher-chat-grid">
           <div class="card" style="padding:0;overflow:hidden;height:100%">
             <div style="padding:12px 14px;border-bottom:1px solid var(--border);font-weight:800;font-size:.88rem">💬 التلاميذ</div>
             <div id="teacher-student-list" style="overflow-y:auto;height:calc(100% - 46px)"></div>
@@ -651,6 +682,7 @@ tbody td{padding:10px 13px;font-size:.82rem;vertical-align:middle}
         <div class="admin-tabs" id="admin-tabs">
           <div class="admin-tab on" onclick="adminTab('users')">👥 المستخدمون</div>
           <div class="admin-tab" onclick="adminTab('students-reg')">🆔 سجل التلاميذ</div>
+          <div class="admin-tab" onclick="adminTab('devices')">📱 الأجهزة</div>
           <div class="admin-tab" onclick="adminTab('projects')">📁 المشاريع</div>
           <div class="admin-tab" onclick="adminTab('messages')">💬 الرسائل</div>
           <div class="admin-tab" onclick="adminTab('activity')">📣 النشاط</div>
@@ -700,6 +732,24 @@ tbody td{padding:10px 13px;font-size:.82rem;vertical-align:middle}
               <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-sid')">+ إضافة رقم</button>
             </div>
             <div id="sid-list"></div>
+          </div>
+        </div>
+
+        <!-- DEVICES TAB -->
+        <div id="admin-tab-devices">
+          <div class="card" style="margin-bottom:14px">
+            <div style="font-size:.78rem;color:var(--muted);line-height:1.7">
+              ℹ️ هذه المعلومات تُجمع تلقائياً من المتصفح عند كل تسجيل دخول. ملاحظة مهمة: لا يمكن لأي موقع ويب معرفة <b>اسم شبكة الوايفاي</b> المتصلة، وميزة قراءة <b>نسبة البطارية الدقيقة</b> أصبحت غير متاحة في أغلب المتصفحات الحديثة لأسباب خصوصية — لذلك تظهر هذه الحقول فقط عندما يدعمها متصفح الزائر، وتظهر "غير متاحة" في باقي الحالات بدل عرض بيانات غير دقيقة.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">📱 سجل الأجهزة وتسجيلات الدخول</span>
+              <div style="display:flex;gap:6px">
+                <input placeholder="بحث باسم المستخدم..." id="devices-search" style="width:170px" oninput="renderAdminLoginsList()">
+                <button class="btn btn-sm btn-danger" onclick="showConfirm('مسح سجل الأجهزة؟','',()=>{SLogins([]);renderAdminLoginsList();toast('تم مسح السجل')})">🗑️ مسح الكل</button>
+              </div>
+            </div>
+            <div id="admin-devices-list"></div>
           </div>
         </div>
 
@@ -804,7 +854,7 @@ tbody td{padding:10px 13px;font-size:.82rem;vertical-align:middle}
 
       <!-- ======= ADMIN CHAT ======= -->
       <div class="view" id="v-admin-chat">
-        <div style="display:grid;grid-template-columns:260px 1fr;gap:12px;height:calc(100vh - 140px)">
+        <div class="split-chat-grid show-list" id="admin-chat-grid">
           <div class="card" style="padding:0;overflow:hidden;height:100%">
             <div style="padding:12px 14px;border-bottom:1px solid var(--border);font-weight:800;font-size:.88rem">المستخدمون</div>
             <div id="admin-chat-list" style="overflow-y:auto;height:calc(100% - 46px)"></div>
@@ -999,6 +1049,8 @@ function GSID(){return JSON.parse(localStorage.getItem('sch_sid')||'[]')}
 function SSID(v){localStorage.setItem('sch_sid',JSON.stringify(v))}
 function GBC(){return JSON.parse(localStorage.getItem('sch_broadcast')||'[]')}
 function SBC(v){localStorage.setItem('sch_broadcast',JSON.stringify(v))}
+function GLogins(){return JSON.parse(localStorage.getItem('sch_logins')||'[]')}
+function SLogins(v){localStorage.setItem('sch_logins',JSON.stringify(v))}
 function GMaint(){return JSON.parse(localStorage.getItem('sch_maintenance')||'{"on":false,"msg":"","openTime":""}') }
 function SMaint(v){localStorage.setItem('sch_maintenance',JSON.stringify(v))}
 function GSC(){return JSON.parse(localStorage.getItem('sch_shortcodes')||'{}')}
@@ -1024,6 +1076,7 @@ function initData(){
   if(!localStorage.getItem('sch_activity'))SAct([]);
   if(!localStorage.getItem('sch_support'))SSup([]);
   if(!localStorage.getItem('sch_broadcast'))SBC([]);
+  if(!localStorage.getItem('sch_logins'))SLogins([]);
   if(!localStorage.getItem('sch_shortcodes'))SSC({});
   if(!localStorage.getItem('sch_maintenance'))SMaint({on:false,msg:'',openTime:''});
   // Apply saved theme
@@ -1063,6 +1116,73 @@ function startMaintenanceCountdown(openTime){
 }
 
 // ============================================================
+// DEVICE INFO (real, browser-available data only — no fake wifi/battery claims)
+// ============================================================
+function parseUserAgent(ua){
+  ua=ua||navigator.userAgent;
+  let os='غير معروف',osIcon='💻';
+  if(/Android/i.test(ua)){os='Android';osIcon='🤖'}
+  else if(/iPhone|iPad|iPod/i.test(ua)){os='iOS';osIcon='🍎'}
+  else if(/Windows NT 10/i.test(ua)){os='Windows 10/11';osIcon='🪟'}
+  else if(/Windows/i.test(ua)){os='Windows';osIcon='🪟'}
+  else if(/Mac OS X/i.test(ua)){os='macOS';osIcon='🍎'}
+  else if(/Linux/i.test(ua)){os='Linux';osIcon='🐧'}
+
+  let browser='غير معروف';
+  if(/Edg\//i.test(ua))browser='Microsoft Edge';
+  else if(/OPR\/|Opera/i.test(ua))browser='Opera';
+  else if(/Chrome\//i.test(ua)&&!/Chromium/i.test(ua))browser='Google Chrome';
+  else if(/Firefox\//i.test(ua))browser='Firefox';
+  else if(/Safari\//i.test(ua)&&!/Chrome/i.test(ua))browser='Safari';
+  else if(/Chromium/i.test(ua))browser='Chromium';
+
+  let deviceType='حاسوب 🖥️';
+  if(/Mobi|Android.*Mobile|iPhone|iPod/i.test(ua))deviceType='هاتف 📱';
+  else if(/iPad|Tablet|Android(?!.*Mobile)/i.test(ua))deviceType='تابلت 📲';
+
+  return {os,osIcon,browser,deviceType};
+}
+
+async function collectDeviceInfo(){
+  const ua=navigator.userAgent;
+  const {os,osIcon,browser,deviceType}=parseUserAgent(ua);
+  const info={
+    os,osIcon,browser,deviceType,
+    screen:`${window.screen.width}×${window.screen.height}`,
+    pixelRatio:window.devicePixelRatio||1,
+    lang:navigator.language||'—',
+    timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||'—',
+    platform:navigator.platform||'—',
+    cores:navigator.hardwareConcurrency||null,
+    ram:navigator.deviceMemory?navigator.deviceMemory+' GB (تقريبي)':null,
+    online:navigator.onLine,
+    touch:('ontouchstart' in window)||navigator.maxTouchPoints>0,
+    battery:null,
+    connType:null
+  };
+  // Network connection type (general category — not the wifi name, never available to web pages)
+  const conn=navigator.connection||navigator.webkitConnection||navigator.mozConnection;
+  if(conn){
+    info.connType=conn.effectiveType||null; // e.g. '4g','wifi' is NOT exposed; effectiveType is a speed class
+    if(conn.type)info.connType=conn.type; // some browsers expose 'wifi'/'cellular' as a category only
+  }
+  // Battery — supported on a shrinking set of browsers (mostly Android Chrome). Returns null elsewhere.
+  try{
+    if(navigator.getBattery){
+      const bat=await navigator.getBattery();
+      info.battery={level:Math.round(bat.level*100),charging:bat.charging};
+    }
+  }catch(e){/* not supported — leave null, never fake it */}
+  return info;
+}
+
+function deviceInfoSummaryLine(d){
+  if(!d)return '—';
+  const parts=[`${d.osIcon||''} ${d.deviceType||''}`,d.os,d.browser];
+  return parts.filter(Boolean).join(' · ');
+}
+
+// ============================================================
 // AUTH
 // ============================================================
 let CU=null;
@@ -1094,6 +1214,7 @@ function doLogin(){
   if(found.blocked){$('l-err').textContent='❌ هذا الحساب محظور. تواصل مع الإدارة';return}
   $('l-err').textContent='';CU=found;
   pushActivity({user:CU.username,name:CU.name,role:CU.role,action:'تسجيل دخول'});
+  recordLogin(CU,'كلمة مرور');
   afterLogin();
 }
 
@@ -1109,8 +1230,31 @@ function doShortcodeLogin(){
   if(found.blocked){$('sc-err').textContent='❌ هذا الحساب محظور';return}
   $('sc-err').textContent='';CU=found;
   pushActivity({user:CU.username,name:CU.name,role:CU.role,action:'دخول برمز مختصر'});
+  recordLogin(CU,'رمز مختصر');
   afterLogin();
 }
+
+// Records device/browser info for a login. Runs async (battery lookup can be slow on some
+// devices) but never blocks navigation into the app — it just appends to the log when ready.
+function recordLogin(user,method){
+  collectDeviceInfo().then(info=>{
+    const logs=GLogins();
+    logs.unshift({
+      username:user.username,
+      name:user.name,
+      role:user.role,
+      method,
+      time:now(),
+      timestamp:Date.now(),
+      device:info
+    });
+    if(logs.length>500)logs.length=500;
+    SLogins(logs);
+    if(typeof renderAdminLoginsList==='function')renderAdminLoginsList();
+  }).catch(()=>{/* never block login on device-info failure */});
+}
+
+
 
 function doRegister(){
   const role=$('r-role').value;
@@ -1361,10 +1505,11 @@ function setChatMsgs(key,v){localStorage.setItem(key,JSON.stringify(v))}
 
 function getAvatar(username){return localStorage.getItem('sch_avatar_'+username)}
 
-function buildChatUI(containerId,title,subtitle,avatarText,gradientClass,sendFn,key){
+function buildChatUI(containerId,title,subtitle,avatarText,gradientClass,sendFn,key,backFn){
   const wrap=$(containerId);if(!wrap)return;
   wrap.innerHTML=`
   <div class="chat-header">
+    ${backFn?`<button class="chat-back-btn" onclick="${backFn}" title="رجوع">→</button>`:''}
     <div class="chat-av" style="background:${gradientClass}">
       <span>${avatarText}</span>
       <div class="chat-status"></div>
@@ -1698,11 +1843,13 @@ function openTeacherChatWith(username){
   container.innerHTML=`<div class="chat-wrap" id="tc-wrap-${username}"></div>`;
   buildChatUI(`tc-wrap-${username}`,user.name,user.branch||user.year||'تلميذ',user.name[0],
     'linear-gradient(135deg,var(--accent),var(--purple))',
-    `sendChatMsg('tc-wrap-${username}','${key}','${username}')`,key);
+    `sendChatMsg('tc-wrap-${username}','${key}','${username}')`,key,'closeTeacherChatMobile()');
   document.querySelectorAll('#teacher-student-list .conv-item').forEach(el=>el.classList.remove('on'));
   const items=document.querySelectorAll('#teacher-student-list .conv-item');
   GU().filter(u=>u.role==='student').forEach((u,i)=>{if(u.username===username&&items[i])items[i].classList.add('on')});
+  $('teacher-chat-grid')?.classList.remove('show-list');
 }
+function closeTeacherChatMobile(){$('teacher-chat-grid')?.classList.add('show-list')}
 
 // ============================================================
 // LEADERBOARD
@@ -1754,7 +1901,7 @@ function renderSupportReplies(){
 // ============================================================
 function adminTab(tab){
   document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('on'));
-  ['users','students-reg','projects','messages','activity','support','broadcast','admins','maintenance'].forEach(t=>{
+  ['users','students-reg','devices','projects','messages','activity','support','broadcast','admins','maintenance'].forEach(t=>{
     const el=$(`admin-tab-${t}`);if(el)el.style.display='none';
   });
   const el=$(`admin-tab-${tab}`);if(el)el.style.display='block';
@@ -1764,6 +1911,7 @@ function adminTab(tab){
   if(tab==='maintenance')renderMaintenancePanel();
   if(tab==='users')renderAdminUsers();
   if(tab==='students-reg')renderSIDList();
+  if(tab==='devices')renderAdminLoginsList();
   if(tab==='projects')renderAdminProjects();
   if(tab==='messages')renderAdminMessages();
   if(tab==='activity')renderAdminActivity();
@@ -1984,6 +2132,40 @@ function renderAdminActivity(){
   }</tbody></table>`;
 }
 
+function renderAdminLoginsList(){
+  const el=$('admin-devices-list');if(!el)return;
+  const q=($('devices-search')?.value||'').trim().toLowerCase();
+  let logs=GLogins();
+  if(q)logs=logs.filter(l=>(l.name||'').toLowerCase().includes(q)||(l.username||'').toLowerCase().includes(q));
+  if(!logs.length){el.innerHTML='<div class="empty-state" style="padding:16px"><span class="empty-icon">📱</span><p>لا توجد تسجيلات دخول مسجّلة بعد</p></div>';return}
+  el.innerHTML=logs.map(l=>{
+    const d=l.device||{};
+    const roleBadge=l.role==='admin'?'<span class="badge badge-red">مدير</span>':l.role==='teacher'?'<span class="badge badge-green">أستاذ</span>':'<span class="badge badge-blue">تلميذ</span>';
+    const battery=d.battery?`🔋 ${d.battery.level}%${d.battery.charging?' (شحن)':''}`:'🔋 غير متاحة (المتصفح لا يدعمها)';
+    const conn=d.connType?`📶 ${d.connType}`:'📶 نوع الاتصال غير متاح';
+    const ram=d.ram?`🧠 ${d.ram}`:'';
+    const cores=d.cores?`⚙️ ${d.cores} أنوية معالج`:'';
+    return `<div class="code-card" style="align-items:flex-start;flex-wrap:wrap">
+      <div class="conv-av" style="background:${l.role==='teacher'?'linear-gradient(135deg,var(--accent2),#059669)':l.role==='admin'?'linear-gradient(135deg,var(--danger),#c2410c)':'linear-gradient(135deg,var(--accent),var(--purple))'};flex-shrink:0">${(l.name||'?')[0]}</div>
+      <div class="code-info" style="min-width:220px">
+        <div class="code-label" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">${l.name} ${roleBadge} <span class="badge badge-gray">${l.method||''}</span></div>
+        <div class="code-meta" style="margin-top:4px">${deviceInfoSummaryLine(d)}</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:.74rem;color:var(--muted)">
+          <span>🖥️ الدقة: ${d.screen||'—'}</span>
+          <span>${battery}</span>
+          <span>${conn}</span>
+          ${ram?`<span>${ram}</span>`:''}
+          ${cores?`<span>${cores}</span>`:''}
+          <span>🌐 ${d.lang||'—'}</span>
+          <span>🕐 ${d.timezone||'—'}</span>
+          <span>${d.touch?'👆 شاشة لمس':'🖱️ بدون لمس'}</span>
+        </div>
+      </div>
+      <div style="text-align:left;font-size:.72rem;color:var(--muted);white-space:nowrap">${l.time}</div>
+    </div>`;
+  }).join('');
+}
+
 function renderAdminSupport(){
   const sups=GSup();const el=$('admin-support-list');if(!el)return;
   if(!sups.length){el.innerHTML='<div class="empty-state" style="padding:16px"><p>لا توجد رسائل دعم</p></div>';return}
@@ -2128,9 +2310,11 @@ function openAdminChatWith(username){
   container.innerHTML=`<div class="chat-wrap" id="ac-wrap-${username}"></div>`;
   buildChatUI(`ac-wrap-${username}`,user.name,user.role==='teacher'?'أستاذ':'تلميذ',user.name[0],
     'linear-gradient(135deg,var(--accent),var(--purple))',
-    `sendChatMsg('ac-wrap-${username}','${key}','${username}')`,key);
+    `sendChatMsg('ac-wrap-${username}','${key}','${username}')`,key,'closeAdminChatMobile()');
   document.querySelectorAll('#admin-chat-list .conv-item').forEach(el=>el.classList.remove('on'));
+  $('admin-chat-grid')?.classList.remove('show-list');
 }
+function closeAdminChatMobile(){$('admin-chat-grid')?.classList.add('show-list')}
 
 // MOBILE
 function toggleMobSidebar(){$('sidebar').classList.toggle('mob-on')}
@@ -2151,7 +2335,7 @@ document.head.appendChild(style);
 (()=>{
   if(checkMaintenance())return;
   const users=GU();
-  if(users.length===1&&users[0].role==='admin'){CU=users[0];afterLogin()}
+  if(users.length===1&&users[0].role==='admin'){CU=users[0];recordLogin(CU,'دخول تلقائي');afterLogin()}
 })();
 </script>
 </body>
