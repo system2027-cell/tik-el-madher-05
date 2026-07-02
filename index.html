@@ -16,6 +16,14 @@
   --radius:14px;--sidebar:260px;
   --font:'Cairo',sans-serif;
 }
+body.light-mode{
+  --bg:#f4f6fb;--bg2:#ffffff;--bg3:#eef1f8;--bg4:#e4e9f5;
+  --border:rgba(15,23,42,0.08);--border2:rgba(15,23,42,0.14);
+  --text:#0f172a;--muted:#5b6472;--muted2:#8a93a3;
+}
+body.light-mode ::-webkit-scrollbar-thumb{background:var(--border2)}
+body.light-mode .auth-screen,body.light-mode #auth-screen{background:var(--bg)}
+body.light-mode .lightbox{background:rgba(15,23,42,.92)}
 *{box-sizing:border-box;margin:0;padding:0;font-family:var(--font);-webkit-tap-highlight-color:transparent}
 html{height:100%}
 body{background:var(--bg);color:var(--text);height:100vh;height:100dvh;overflow:hidden;display:flex;flex-direction:column;-webkit-text-size-adjust:100%;touch-action:manipulation}
@@ -238,6 +246,28 @@ tbody td{padding:10px 13px;font-size:.82rem;vertical-align:middle}
 .emoji-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;padding:8px;background:var(--bg3);border-radius:10px;border:1px solid var(--border);margin-bottom:5px}
 .emoji-grid button{background:none;border:none;font-size:1.15rem;cursor:pointer;padding:3px;border-radius:6px;transition:background .15s}
 .emoji-grid button:hover{background:rgba(255,255,255,.1)}
+
+/* ===== MESSENGER-STYLE HEADER ICONS ===== */
+.chat-header-actions{display:flex;align-items:center;gap:4px;margin-right:auto}
+.chat-hdr-ic{width:34px;height:34px;border-radius:50%;border:none;background:transparent;color:var(--accent);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.05rem;transition:all .2s;flex-shrink:0}
+.chat-hdr-ic:hover{background:rgba(99,102,241,.12)}
+.chat-hdr-more{position:relative}
+.chat-hdr-more-menu{position:absolute;top:38px;left:0;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;box-shadow:0 14px 36px rgba(0,0,0,.5);padding:5px;min-width:150px;display:none;z-index:60;animation:popIn .15s}
+.chat-hdr-more-menu.on{display:block}
+.chat-hdr-more-menu button{width:100%;text-align:right;background:none;border:none;color:var(--text);padding:8px 10px;font-size:.8rem;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;font-family:var(--font)}
+.chat-hdr-more-menu button:hover{background:rgba(255,255,255,.07)}
+
+/* ===== MESSENGER-STYLE COMPOSER ===== */
+.chat-composer-row{display:flex;align-items:center;gap:4px}
+.chat-circle-btn{width:36px;height:36px;border-radius:50%;border:none;background:transparent;color:var(--accent);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;transition:all .2s}
+.chat-circle-btn:hover{background:rgba(99,102,241,.12)}
+.chat-circle-btn.send-active{background:var(--accent);color:#fff}
+.chat-circle-btn.send-active:hover{background:#4f46e5}
+.chat-input-row-msgr{flex:1;display:flex;align-items:center;gap:6px;background:var(--bg3);border-radius:20px;padding:6px 6px 6px 12px;border:1px solid var(--border);transition:border-color .2s;min-width:0}
+.chat-input-row-msgr:focus-within{border-color:var(--accent)}
+.chat-input-row-msgr .chat-input{padding:5px 0}
+.chat-emoji-inline{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.05rem;padding:3px 6px;border-radius:6px;flex-shrink:0}
+.chat-emoji-inline:hover{color:var(--accent)}
 
 /* ===== TEACHER BROADCAST ===== */
 .teacher-broadcast-wrap{max-width:700px;margin:0 auto}
@@ -564,12 +594,12 @@ body.chat-light .reply-quote{background:rgba(0,0,0,.05)}
   .sidebar{position:fixed;right:0;top:58px;bottom:0;z-index:300;transform:translateX(100%)}
   .sidebar.mob-on{transform:translateX(0);box-shadow:-10px 0 40px rgba(0,0,0,.5)}
   #mob-menu-btn{display:flex!important}
-  .content-area{padding:14px}
+  .content-area{padding:14px;padding-bottom:76px}
   .stats-grid{grid-template-columns:1fr 1fr}
   .frow.c2,.frow.c3{grid-template-columns:1fr}
   .modal{margin:10px;padding:20px}
   .notif-panel{width:calc(100vw - 28px);right:14px}
-  .chat-wrap{height:calc(100vh - 160px);height:calc(100dvh - 160px)}
+  .chat-wrap{height:calc(100vh - 220px);height:calc(100dvh - 220px)}
   table{font-size:.76rem}
   table thead th,table tbody td{padding:7px 9px}
   /* Prevent iOS auto-zoom on focus: inputs need >=16px on mobile */
@@ -578,7 +608,7 @@ body.chat-light .reply-quote{background:rgba(0,0,0,.05)}
   .ibtn{width:38px;height:38px}
   .nav-item{padding:11px 14px;font-size:.88rem}
   .btn-auth{padding:14px}
-  .send-btn,.chat-tool-btn{min-width:38px;min-height:38px}
+  .send-btn,.chat-tool-btn,.chat-circle-btn,.chat-hdr-ic{min-width:38px;min-height:38px}
   .admin-tab{padding:9px 14px;font-size:.8rem}
   .auth-card{max-height:92dvh;overflow-y:auto;padding:24px 20px}
   .confirm-box{max-width:92vw;padding:22px}
@@ -592,6 +622,19 @@ body.chat-light .reply-quote{background:rgba(0,0,0,.05)}
 /* Allow vertical scroll on short screens for the auth card */
 #auth-screen{overflow-y:auto}
 
+/* ===== MOBILE BOTTOM TAB BAR (app-like navigation) ===== */
+.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:58px;background:var(--bg2);border-top:1px solid var(--border);z-index:250;align-items:stretch;justify-content:space-around;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(0,0,0,.25)}
+@media(max-width:768px){
+  .mobile-bottom-nav{display:flex}
+  #app.on{height:100vh;height:100dvh}
+  .chat-wrap{margin-bottom:0}
+  .split-chat-grid{height:calc(100vh - 180px);height:calc(100dvh - 180px)}
+}
+.mbn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:var(--muted);font-size:.62rem;font-weight:700;cursor:pointer;position:relative;transition:color .15s;font-family:var(--font)}
+.mbn-item .mbi{font-size:1.2rem;line-height:1}
+.mbn-item.on{color:var(--accent)}
+.mbn-item .mbn-badge{position:absolute;top:4px;right:calc(50% - 20px);background:var(--danger);color:#fff;border-radius:99px;font-size:.54rem;font-weight:900;padding:1px 4px;min-width:14px;text-align:center}
+
 /* ADMIN TABS */
 .admin-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px;background:var(--bg3);padding:6px;border-radius:12px;border:1px solid var(--border)}
 .admin-tab{padding:7px 14px;border-radius:9px;cursor:pointer;font-size:.78rem;font-weight:700;color:var(--muted);transition:all .2s;white-space:nowrap}
@@ -604,6 +647,31 @@ body.chat-light .reply-quote{background:rgba(0,0,0,.05)}
 .profile-av-big img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
 .profile-av-overlay{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;font-size:.7rem;color:#fff;font-weight:700}
 .profile-avatar-wrapper:hover .profile-av-overlay{opacity:1}
+
+/* ===== TELEGRAM-STYLE PROFILE HEADER & MENU ===== */
+.tg-profile-header{text-align:center;padding:26px 16px 22px;background:linear-gradient(180deg,var(--bg2),var(--bg));border-radius:var(--radius);border:1px solid var(--border);margin-bottom:16px}
+.tg-profile-av{width:96px;height:96px;border-radius:50%;margin:0 auto 14px;position:relative;cursor:pointer}
+.tg-profile-av-inner{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:2.3rem;font-weight:900;color:#fff;overflow:hidden;position:relative;box-shadow:0 8px 26px rgba(99,102,241,.35)}
+.tg-profile-av-inner img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.tg-profile-av-cam{position:absolute;bottom:2px;left:2px;width:30px;height:30px;border-radius:50%;background:var(--accent);border:3px solid var(--bg2);display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#fff}
+.tg-profile-name{font-size:1.15rem;font-weight:900}
+.tg-profile-sub{font-size:.8rem;color:var(--muted);margin-top:4px}
+.tg-menu-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px}
+.tg-menu-row{display:flex;align-items:center;gap:13px;padding:13px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .15s}
+.tg-menu-card .tg-menu-row:last-child{border-bottom:none}
+.tg-menu-row:hover{background:rgba(255,255,255,.03)}
+.tg-menu-row.no-hover{cursor:default}
+.tg-menu-row.no-hover:hover{background:transparent}
+.tg-menu-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;color:#fff}
+.tg-menu-body{flex:1;min-width:0}
+.tg-menu-title{font-size:.87rem;font-weight:700;color:var(--text)}
+.tg-menu-desc{font-size:.72rem;color:var(--muted);margin-top:2px;line-height:1.5}
+.tg-menu-arrow{color:var(--muted2);font-size:.85rem;flex-shrink:0;transition:transform .2s}
+.tg-menu-row.open .tg-menu-arrow{transform:rotate(90deg)}
+.tg-accordion-panel{display:none;padding:4px 16px 16px;border-bottom:1px solid var(--border)}
+.tg-menu-card .tg-accordion-panel:last-child{border-bottom:none}
+.tg-accordion-panel.open{display:block;animation:fadeUp .25s ease}
+.tg-logout-row .tg-menu-title{color:var(--danger)}
 
 /* COLOR THEMES */
 .theme-picker{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
@@ -689,12 +757,12 @@ body.screenshot-protected img{-webkit-user-drag:none;pointer-events:none}
 /* SPLIT CHAT GRID (admin-chat / teacher-chat list + conversation) */
 .split-chat-grid{display:grid;grid-template-columns:260px 1fr;gap:12px;height:calc(100vh - 140px);height:calc(100dvh - 140px)}
 @media(max-width:768px){
-  .split-chat-grid{grid-template-columns:1fr;height:calc(100vh - 120px);height:calc(100dvh - 120px)}
+  .split-chat-grid{grid-template-columns:1fr;height:calc(100vh - 180px);height:calc(100dvh - 180px)}
   .split-chat-grid .card:first-child{display:none}
   .split-chat-grid.show-list .card:first-child{display:flex;flex-direction:column}
   .split-chat-grid.show-list #admin-chat-main,.split-chat-grid.show-list #teacher-chat-main{display:none}
 }
-</style>
+</style>&nbsp;
 </head>
 <body>
 
@@ -850,12 +918,8 @@ body.screenshot-protected img{-webkit-user-drag:none;pointer-events:none}
         <div class="stats-grid">
           <div class="stat-c" style="--vc:var(--accent)"><div class="sic" style="background:rgba(99,102,241,.12)">📁</div><div class="sv" id="st-proj-count">0</div><div class="sl">مشاريعي</div></div>
           <div class="stat-c" style="--vc:var(--accent2)"><div class="sic" style="background:rgba(16,185,129,.12)">💬</div><div class="sv" id="st-msg-count">0</div><div class="sl">رسائلي</div></div>
-          <div class="stat-c" style="--vc:var(--accent3)"><div class="sic" style="background:rgba(245,158,11,.12)">📅</div><div class="sv" id="st-event-count">0</div><div class="sl">المواعيد</div></div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" class="home-grid">
-          <div class="card"><div class="card-header"><span class="card-title">📢 مشاريع مقترحة</span><button class="btn btn-sm btn-ghost" onclick="nav('v-student-project')">الكل</button></div><div id="home-suggestions"></div></div>
-          <div class="card"><div class="card-header"><span class="card-title">📅 المواعيد القادمة</span></div><div id="home-events"></div></div>
-        </div>
+        <div class="card"><div class="card-header"><span class="card-title">📢 مشاريع مقترحة</span><button class="btn btn-sm btn-ghost" onclick="nav('v-student-project')">الكل</button></div><div id="home-suggestions"></div></div>
       </div>
 
       <!-- ======= STUDENT CHAT ======= -->
@@ -899,11 +963,6 @@ body.screenshot-protected img{-webkit-user-drag:none;pointer-events:none}
         </div>
       </div>
 
-      <!-- ======= STUDENT CALENDAR ======= -->
-      <div class="view" id="v-student-calendar">
-        <div class="card"><div class="card-header"><span class="card-title">📅 التقويم الدراسي</span></div><div id="calendar-view"></div></div>
-      </div>
-
       <!-- ======= TEACHER HOME ======= -->
       <div class="view" id="v-teacher-home">
         <div style="margin-bottom:18px">
@@ -943,23 +1002,6 @@ body.screenshot-protected img{-webkit-user-drag:none;pointer-events:none}
           <button class="btn btn-primary" onclick="addSuggestion()">📢 نشر لجميع التلاميذ</button>
         </div>
         <div class="card"><div class="card-header"><span class="card-title">📋 المقترحات المنشورة</span></div><div id="my-suggestions"></div></div>
-      </div>
-
-      <!-- ======= TEACHER CALENDAR ======= -->
-      <div class="view" id="v-teacher-calendar">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" class="home-grid">
-          <div class="card">
-            <div class="card-header"><span class="card-title">➕ إضافة موعد</span></div>
-            <div class="fg"><label>عنوان الحدث *</label><input id="ev-title" placeholder="موعد تسليم المشروع..."></div>
-            <div class="frow c2">
-              <div class="fg"><label>التاريخ *</label><input type="date" id="ev-date"></div>
-              <div class="fg"><label>الوقت</label><input type="time" id="ev-time"></div>
-            </div>
-            <div class="fg"><label>ملاحظات</label><textarea id="ev-desc" rows="2" placeholder="تفاصيل إضافية..."></textarea></div>
-            <button class="btn btn-primary" onclick="addEvent()">📅 إضافة الموعد</button>
-          </div>
-          <div class="card"><div class="card-header"><span class="card-title">📅 المواعيد</span></div><div id="events-list"></div></div>
-        </div>
       </div>
 
       <!-- ======= TEACHER CHAT (Broadcast only) ======= -->
@@ -1437,7 +1479,6 @@ body.screenshot-protected img{-webkit-user-drag:none;pointer-events:none}
             <div class="set-row"><div class="set-info"><div class="set-label">الدردشة الجماعية</div></div><div class="set-ctrl"><label class="tgl"><input type="checkbox" id="cfg-modGroupChat"><span class="tgl-sl"></span></label></div></div>
             <div class="set-row"><div class="set-info"><div class="set-label">المشاريع</div></div><div class="set-ctrl"><label class="tgl"><input type="checkbox" id="cfg-modProjects"><span class="tgl-sl"></span></label></div></div>
             <div class="set-row"><div class="set-info"><div class="set-label">الدعم والمساعدة</div></div><div class="set-ctrl"><label class="tgl"><input type="checkbox" id="cfg-modSupport"><span class="tgl-sl"></span></label></div></div>
-            <div class="set-row"><div class="set-info"><div class="set-label">التقويم</div></div><div class="set-ctrl"><label class="tgl"><input type="checkbox" id="cfg-modCalendar"><span class="tgl-sl"></span></label></div></div>
             <div class="settings-section-title">🐞 وضع التصحيح</div>
             <div class="set-row"><div class="set-info"><div class="set-label">تفعيل وضع التصحيح (Debug Mode)</div><div class="set-desc">يضيف شارة 🐞 ثابتة على الشاشة لتمييز بيئة التطوير</div></div><div class="set-ctrl"><label class="tgl"><input type="checkbox" id="cfg-debugMode"><span class="tgl-sl"></span></label></div></div>
           </div>
@@ -1519,55 +1560,107 @@ body.screenshot-protected img{-webkit-user-drag:none;pointer-events:none}
       <!-- ======= PROFILE ======= -->
       <div class="view" id="v-profile">
         <div style="max-width:540px;margin:0 auto">
-          <div class="card">
-            <div class="card-header"><span class="card-title">👤 الملف الشخصي</span></div>
-            <!-- Avatar -->
-            <div style="text-align:center;margin-bottom:20px">
-              <div class="profile-avatar-wrapper" onclick="document.getElementById('avatar-file').click()">
-                <div class="profile-av-big" id="profile-av-big">
-                  <span id="profile-av-letter"></span>
-                  <img id="profile-av-img" src="" style="display:none">
-                </div>
-                <div class="profile-av-overlay">📷 تغيير</div>
+
+          <!-- Big avatar header -->
+          <div class="tg-profile-header">
+            <div class="tg-profile-av" onclick="document.getElementById('avatar-file').click()">
+              <div class="tg-profile-av-inner" id="profile-av-big">
+                <span id="profile-av-letter"></span>
+                <img id="profile-av-img" src="" style="display:none">
               </div>
-              <input type="file" id="avatar-file" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
-              <div style="font-size:.78rem;color:var(--muted);margin-top:6px">انقر لتغيير الصورة الشخصية</div>
+              <div class="tg-profile-av-cam">📷</div>
             </div>
-            <div class="fg"><label>الاسم الكامل</label><input id="prof-name" placeholder="اسمك الكامل"></div>
-            <div class="fg"><label>البريد الإلكتروني</label><input id="prof-email" type="email"></div>
-            <div id="prof-extra"></div>
-            <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="saveProfile()">💾 حفظ التغييرات</button>
+            <input type="file" id="avatar-file" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
+            <div class="tg-profile-name" id="tg-prof-name"></div>
+            <div class="tg-profile-sub" id="tg-prof-sub"></div>
           </div>
-          <div class="card">
-            <div class="card-header"><span class="card-title">🔒 تغيير كلمة المرور</span></div>
-            <div class="fg"><label>كلمة المرور الحالية</label><div class="pw-wrap"><input id="old-pass" type="password" placeholder="••••••••"><button class="pw-toggle" onclick="togglePW('old-pass',this)" type="button">👁</button></div></div>
-            <div class="fg"><label>كلمة المرور الجديدة</label><div class="pw-wrap"><input id="new-pass" type="password" placeholder="••••••••"><button class="pw-toggle" onclick="togglePW('new-pass',this)" type="button">👁</button></div></div>
-            <div class="fg"><label>تأكيد كلمة المرور الجديدة</label><div class="pw-wrap"><input id="new-pass2" type="password" placeholder="••••••••"><button class="pw-toggle" onclick="togglePW('new-pass2',this)" type="button">👁</button></div></div>
-            <button class="btn btn-warning" style="width:100%;margin-top:4px" onclick="changePassword()">🔑 تغيير كلمة المرور</button>
-          </div>
-          <div class="card">
-            <div class="card-header"><span class="card-title">🎨 الثيم واللون</span></div>
-            <label style="margin-bottom:8px">اختر لون التمييز</label>
-            <div class="theme-picker" id="theme-picker">
-              <div class="theme-dot on" style="background:#6366f1" data-color="#6366f1" onclick="setTheme('#6366f1','#8b5cf6')"></div>
-              <div class="theme-dot" style="background:#10b981" data-color="#10b981" onclick="setTheme('#10b981','#059669')"></div>
-              <div class="theme-dot" style="background:#f59e0b" data-color="#f59e0b" onclick="setTheme('#f59e0b','#d97706')"></div>
-              <div class="theme-dot" style="background:#ef4444" data-color="#ef4444" onclick="setTheme('#ef4444','#dc2626')"></div>
-              <div class="theme-dot" style="background:#38bdf8" data-color="#38bdf8" onclick="setTheme('#38bdf8','#0ea5e9')"></div>
-              <div class="theme-dot" style="background:#ec4899" data-color="#ec4899" onclick="setTheme('#ec4899','#db2777')"></div>
-              <div class="theme-dot" style="background:#14b8a6" data-color="#14b8a6" onclick="setTheme('#14b8a6','#0d9488')"></div>
+
+          <!-- الحساب -->
+          <div class="tg-menu-card">
+            <div class="tg-menu-row" id="acc-row" onclick="toggleAccordion('acc')">
+              <div class="tg-menu-icon" style="background:linear-gradient(135deg,#3b82f6,#2563eb)">👤</div>
+              <div class="tg-menu-body"><div class="tg-menu-title">الحساب</div><div class="tg-menu-desc">الاسم، البريد الإلكتروني، البيانات الشخصية</div></div>
+              <div class="tg-menu-arrow">‹</div>
             </div>
-            <label style="margin-top:14px;margin-bottom:8px">الخلفية</label>
-            <div style="display:flex;gap:8px">
-              <button class="btn btn-ghost" style="flex:1" onclick="setDarkMode()">🌙 داكن</button>
-              <button class="btn btn-ghost" style="flex:1" onclick="setMidMode()">🌗 متوسط</button>
+            <div class="tg-accordion-panel" id="acc-panel">
+              <div class="fg"><label>الاسم الكامل</label><input id="prof-name" placeholder="اسمك الكامل"></div>
+              <div class="fg"><label>البريد الإلكتروني</label><input id="prof-email" type="email"></div>
+              <div id="prof-extra"></div>
+              <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="saveProfile()">💾 حفظ التغييرات</button>
             </div>
           </div>
+
+          <!-- المظهر والألوان -->
+          <div class="tg-menu-card">
+            <div class="tg-menu-row" id="app-row" onclick="toggleAccordion('app')">
+              <div class="tg-menu-icon" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)">🎨</div>
+              <div class="tg-menu-body"><div class="tg-menu-title">المظهر والألوان</div><div class="tg-menu-desc">الوضع الليلي/النهاري، لون التمييز</div></div>
+              <div class="tg-menu-arrow">‹</div>
+            </div>
+            <div class="tg-accordion-panel" id="app-panel">
+              <div class="set-row">
+                <div class="set-info"><div class="set-label">🌙 الوضع الليلي</div><div class="set-desc">تفعيل الخلفية الداكنة أو النهارية الفاتحة للمنصة</div></div>
+                <div class="set-ctrl"><label class="tgl"><input type="checkbox" id="prof-dark-toggle" onchange="onToggleDarkMode(this.checked)"><span class="tgl-sl"></span></label></div>
+              </div>
+              <label style="margin-top:10px;margin-bottom:8px;display:block">لون التمييز</label>
+              <div class="theme-picker" id="theme-picker">
+                <div class="theme-dot on" style="background:#6366f1" data-color="#6366f1" onclick="setTheme('#6366f1','#8b5cf6')"></div>
+                <div class="theme-dot" style="background:#10b981" data-color="#10b981" onclick="setTheme('#10b981','#059669')"></div>
+                <div class="theme-dot" style="background:#f59e0b" data-color="#f59e0b" onclick="setTheme('#f59e0b','#d97706')"></div>
+                <div class="theme-dot" style="background:#ef4444" data-color="#ef4444" onclick="setTheme('#ef4444','#dc2626')"></div>
+                <div class="theme-dot" style="background:#38bdf8" data-color="#38bdf8" onclick="setTheme('#38bdf8','#0ea5e9')"></div>
+                <div class="theme-dot" style="background:#ec4899" data-color="#ec4899" onclick="setTheme('#ec4899','#db2777')"></div>
+                <div class="theme-dot" style="background:#14b8a6" data-color="#14b8a6" onclick="setTheme('#14b8a6','#0d9488')"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- الإشعارات والرسائل -->
+          <div class="tg-menu-card">
+            <div class="tg-menu-row" id="notif-row" onclick="toggleAccordion('notif')">
+              <div class="tg-menu-icon" style="background:linear-gradient(135deg,#ef4444,#f97316)">🔔</div>
+              <div class="tg-menu-body"><div class="tg-menu-title">الإشعارات والرسائل</div><div class="tg-menu-desc">استقبال إشعارات الرسائل الجديدة</div></div>
+              <div class="tg-menu-arrow">‹</div>
+            </div>
+            <div class="tg-accordion-panel" id="notif-panel-acc">
+              <div class="set-row">
+                <div class="set-info"><div class="set-label">📥 استقبال الرسائل</div><div class="set-desc">عند التعطيل، لن تصلك إشعارات بالرسائل الجديدة (تبقى الرسائل مخزنة ويمكنك مراجعتها يدوياً)</div></div>
+                <div class="set-ctrl"><label class="tgl"><input type="checkbox" id="prof-receive-msgs" onchange="toggleReceiveMessages(this.checked)"><span class="tgl-sl"></span></label></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- الأمان -->
+          <div class="tg-menu-card">
+            <div class="tg-menu-row" id="sec-row" onclick="toggleAccordion('sec')">
+              <div class="tg-menu-icon" style="background:linear-gradient(135deg,#10b981,#059669)">🔒</div>
+              <div class="tg-menu-body"><div class="tg-menu-title">الأمان وكلمة المرور</div><div class="tg-menu-desc">تغيير كلمة المرور الخاصة بحسابك</div></div>
+              <div class="tg-menu-arrow">‹</div>
+            </div>
+            <div class="tg-accordion-panel" id="sec-panel">
+              <div class="fg"><label>كلمة المرور الحالية</label><div class="pw-wrap"><input id="old-pass" type="password" placeholder="••••••••"><button class="pw-toggle" onclick="togglePW('old-pass',this)" type="button">👁</button></div></div>
+              <div class="fg"><label>كلمة المرور الجديدة</label><div class="pw-wrap"><input id="new-pass" type="password" placeholder="••••••••"><button class="pw-toggle" onclick="togglePW('new-pass',this)" type="button">👁</button></div></div>
+              <div class="fg"><label>تأكيد كلمة المرور الجديدة</label><div class="pw-wrap"><input id="new-pass2" type="password" placeholder="••••••••"><button class="pw-toggle" onclick="togglePW('new-pass2',this)" type="button">👁</button></div></div>
+              <button class="btn btn-warning" style="width:100%;margin-top:4px" onclick="changePassword()">🔑 تغيير كلمة المرور</button>
+            </div>
+          </div>
+
+          <!-- تسجيل الخروج -->
+          <div class="tg-menu-card">
+            <div class="tg-menu-row tg-logout-row no-hover" onclick="doLogout()">
+              <div class="tg-menu-icon" style="background:linear-gradient(135deg,#64748b,#475569)">🚪</div>
+              <div class="tg-menu-body"><div class="tg-menu-title">تسجيل الخروج</div></div>
+            </div>
+          </div>
+
         </div>
       </div>
 
     </div><!-- end content-area -->
   </div><!-- end main-body -->
+
+  <!-- MOBILE BOTTOM TAB BAR -->
+  <div class="mobile-bottom-nav" id="mobile-bottom-nav"></div>
 </div><!-- end app -->
 
 <!-- MODALS -->
@@ -1640,6 +1733,14 @@ body.screenshot-protected img{-webkit-user-drag:none;pointer-events:none}
 // UTILITY
 // ============================================================
 const $=id=>document.getElementById(id);
+// ---- appearance (light/dark) mode ----
+function setAppearanceMode(mode){ // 'light' | 'dark'
+  document.body.classList.toggle('light-mode',mode==='light');
+  localStorage.setItem('sch_appearance',mode);
+}
+(function applySavedAppearance(){
+  if(localStorage.getItem('sch_appearance')==='light')document.body.classList.add('light-mode');
+})();
 const toast=(msg,type='s')=>{
   const el=$('toast');$('toast-icon').textContent=type==='s'?'✅':type==='e'?'❌':'ℹ️';
   $('toast-msg').textContent=msg;el.className='on '+type;clearTimeout(el._t);
@@ -1709,7 +1810,7 @@ function defaultSettings(){return {
   notifyTeacherOnUpload:true,notifyStudentOnGrade:true,
   // --- developer ---
   debugMode:false,apiKey:'',autoBackupFreq:'off',
-  modChat:true,modGroupChat:true,modProjects:true,modSupport:true,modCalendar:true,
+  modChat:true,modGroupChat:true,modProjects:true,modSupport:true,
 }}
 function GSettings(){return Object.assign(defaultSettings(),JSON.parse(localStorage.getItem('sch_settings')||'{}'))}
 function SSettings(v){localStorage.setItem('sch_settings',JSON.stringify(v))}
@@ -1723,7 +1824,13 @@ function GLoginFails(){return JSON.parse(localStorage.getItem('sch_loginfails')|
 function SLoginFails(v){localStorage.setItem('sch_loginfails',JSON.stringify(v))}
 
 function pushActivity(a){const arr=GAct();arr.unshift({...a,time:now()});if(arr.length>500)arr.pop();SAct(arr)}
-function pushNotif(n){const arr=GN();arr.unshift({...n,read:false,time:now()});if(arr.length>200)arr.pop();SN(arr);renderNotifBadge()}
+function pushNotif(n){
+  if(n.to&&n.to!=='all'){
+    const target=GU().find(u=>u.username===n.to);
+    if(target&&target.notifDisabled)return; // user disabled receiving notifications
+  }
+  const arr=GN();arr.unshift({...n,read:false,time:now()});if(arr.length>200)arr.pop();SN(arr);renderNotifBadge()
+}
 
 // ============================================================
 // INIT DATA (no fake data — only admin account)
@@ -2078,6 +2185,10 @@ function loadProfileForm(){
   $('profile-av-letter').textContent=CU.name[0]||'U';
   if(av){$('profile-av-img').src=av;$('profile-av-img').style.display='block';$('profile-av-letter').style.display='none'}
   else{$('profile-av-img').style.display='none';$('profile-av-letter').style.display=''}
+  // Header name/sub
+  const roleLabel=CU.role==='student'?'تلميذ':CU.role==='teacher'?'أستاذ':'إداري';
+  $('tg-prof-name').textContent=CU.name;
+  $('tg-prof-sub').textContent=`${roleLabel}${CU.role==='student'?' — '+(CU.year||'')+' '+(CU.branch||''):''} · @${CU.username}`;
   // Extra fields
   let extra='';
   if(CU.role==='student') extra=`<div class="fg"><label>السنة</label><input id="prof-year" value="${CU.year||''}"></div><div class="fg"><label>الشعبة</label><input id="prof-branch" value="${CU.branch||''}"></div>`;
@@ -2086,6 +2197,37 @@ function loadProfileForm(){
   // Theme dots
   const savedAccent=localStorage.getItem('sch_accent')||'#6366f1';
   document.querySelectorAll('.theme-dot').forEach(d=>{d.classList.toggle('on',d.dataset.color===savedAccent)});
+  // Dark/light toggle state
+  const darkToggle=$('prof-dark-toggle');
+  if(darkToggle)darkToggle.checked=(localStorage.getItem('sch_appearance')!=='light');
+  // Receive-messages toggle state
+  const rmToggle=$('prof-receive-msgs');
+  if(rmToggle)rmToggle.checked=!CU.notifDisabled;
+}
+
+// ---- Telegram-style accordion menu ----
+function toggleAccordion(name){
+  const row=$(name+'-row');const panel=$(name+'-panel')||$(name+'-panel-acc');
+  if(!row||!panel)return;
+  const willOpen=!panel.classList.contains('open');
+  // close all other accordions in the same view
+  document.querySelectorAll('.tg-accordion-panel.open').forEach(p=>{if(p!==panel)p.classList.remove('open')});
+  document.querySelectorAll('.tg-menu-row.open').forEach(r=>{if(r!==row)r.classList.remove('open')});
+  panel.classList.toggle('open',willOpen);
+  row.classList.toggle('open',willOpen);
+}
+
+// ---- dark/light appearance toggle (from profile) ----
+function onToggleDarkMode(isDarkChecked){
+  setAppearanceMode(isDarkChecked?'dark':'light');
+  toast(isDarkChecked?'تم تفعيل الوضع الليلي 🌙':'تم تفعيل الوضع النهاري ☀️');
+}
+
+// ---- receive-messages notification toggle (from profile) ----
+function toggleReceiveMessages(isEnabled){
+  const users=GU();const i=users.findIndex(u=>u.username===CU.username);if(i<0)return;
+  users[i].notifDisabled=!isEnabled;SU(users);CU=users[i];
+  toast(isEnabled?'سيصلك إشعار بالرسائل الجديدة 🔔':'تم إيقاف إشعارات الرسائل الجديدة 🔕');
 }
 
 function handleAvatarUpload(input){
@@ -2131,16 +2273,6 @@ function setTheme(accent,purple){
   document.querySelectorAll('.theme-dot').forEach(d=>d.classList.toggle('on',d.dataset.color===accent));
   toast('تم تغيير اللون ✅');
 }
-function setDarkMode(){
-  document.documentElement.style.setProperty('--bg','#0a0e1a');
-  document.documentElement.style.setProperty('--bg2','#111827');
-  toast('الثيم الداكن');
-}
-function setMidMode(){
-  document.documentElement.style.setProperty('--bg','#0f172a');
-  document.documentElement.style.setProperty('--bg2','#1e293b');
-  toast('الثيم المتوسط');
-}
 
 // ============================================================
 // SIDEBAR / NAVIGATION
@@ -2162,8 +2294,7 @@ function buildSidebar(){
       if(st.modChat)item('v-student-chat','💬','رسائل الأستاذ');
       if(st.modGroupChat)item('v-group-chat','👥','الدردشة الجماعية');
     }
-    if(st.modProjects){grp('أعمالي');item('v-student-project','📚','المشاريع');if(st.modCalendar)item('v-student-calendar','📅','التقويم');}
-    else if(st.modCalendar){grp('أعمالي');item('v-student-calendar','📅','التقويم');}
+    if(st.modProjects){grp('أعمالي');item('v-student-project','📚','المشاريع');}
     grp('أخرى');
     if(st.modSupport)item('v-support','🆘','الدعم والمساعدة');
     item('v-profile','👤','ملفي الشخصي');
@@ -2174,10 +2305,9 @@ function buildSidebar(){
       if(st.modChat)item('v-teacher-chat','📢','إرسال للتلاميذ');
       if(st.modGroupChat)item('v-teacher-group-chat','👥','الدردشة الجماعية');
     }
-    if(st.modProjects||st.modCalendar){
+    if(st.modProjects){
       grp('المحتوى');
-      if(st.modProjects){item('v-teacher-projects','📁','المشاريع الواردة');item('v-teacher-suggestions','📢','اقتراح مشاريع');}
-      if(st.modCalendar)item('v-teacher-calendar','📅','التقويم');
+      item('v-teacher-projects','📁','المشاريع الواردة');item('v-teacher-suggestions','📢','اقتراح مشاريع');
     }
     grp('أخرى');
     if(st.modSupport)item('v-support','🆘','الدعم');
@@ -2186,22 +2316,52 @@ function buildSidebar(){
     grp('الإدارة');item('v-admin','🛡️','لوحة الإدارة');item('v-admin-chat','💬','التواصل');
     grp('أخرى');item('v-profile','👤','ملفي الشخصي');item('v-admin-settings','⚙️','الإعدادات');
   }
+  buildMobileBottomNav(st);
+}
+
+// ---- mobile bottom tab bar (app-like quick navigation) ----
+function buildMobileBottomNav(st){
+  st=st||GSettings();
+  const bar=$('mobile-bottom-nav');if(!bar)return;
+  bar.innerHTML='';
+  function tab(view,icon,label){
+    const b=document.createElement('button');b.className='mbn-item';b.id='mbn-'+view;
+    b.innerHTML=`<span class="mbi">${icon}</span><span>${label}</span>`;
+    b.onclick=()=>nav(view);bar.appendChild(b);
+  }
+  if(CU.role==='student'){
+    tab('v-student-home','🏠','الرئيسية');
+    if(st.modChat)tab('v-student-chat','💬','الرسائل');
+    else if(st.modGroupChat)tab('v-group-chat','👥','الدردشة');
+    if(st.modProjects)tab('v-student-project','📚','المشاريع');
+    tab('v-profile','👤','حسابي');
+  } else if(CU.role==='teacher'){
+    tab('v-teacher-home','🏠','الرئيسية');
+    if(st.modChat)tab('v-teacher-chat','📢','الإرسال');
+    if(st.modProjects)tab('v-teacher-projects','📁','المشاريع');
+    tab('v-profile','👤','حسابي');
+  } else {
+    tab('v-admin','🛡️','الإدارة');
+    tab('v-admin-chat','💬','التواصل');
+    tab('v-admin-settings','⚙️','الإعدادات');
+    tab('v-profile','👤','حسابي');
+  }
 }
 
 function nav(view){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
+  document.querySelectorAll('.mbn-item').forEach(n=>n.classList.remove('on'));
   const el=$(view);if(el)el.classList.add('on');
   const ni=$('ni-'+view);if(ni)ni.classList.add('on');
+  const mbn=$('mbn-'+view);if(mbn)mbn.classList.add('on');
   if(view==='v-student-home') renderStudentHome();
   else if(view==='v-student-chat') renderStudentBroadcastFeed();
   else if(view==='v-group-chat') buildGroupChat('group-chat-wrap');
   else if(view==='v-student-project'){renderSuggestions();renderMyProjects();renderProjMembers()}
-  else if(view==='v-student-calendar') renderCalendar('calendar-view');
   else if(view==='v-teacher-home') renderTeacherHome();
   else if(view==='v-teacher-projects') renderTeacherProjects();
   else if(view==='v-teacher-suggestions'){renderMySuggestions();renderSuggestions()}
-  else if(view==='v-teacher-calendar') renderEvents();
   else if(view==='v-teacher-chat') buildTeacherChatList();
   else if(view==='v-teacher-group-chat') buildGroupChat('teacher-group-wrap');
   else if(view==='v-admin'){renderAdminStats();renderAdminUsers();renderSIDList();renderAdminProjects();renderAdminMessages();renderAdminActivity();renderAdminSupport();renderBroadcastHistory();renderAdminsList();renderMaintenancePanel();populateNewAdminSelect()}
@@ -2384,8 +2544,16 @@ function buildChatUI(containerId,title,subtitle,avatarText,gradientClass,sendFn,
       <div class="hs" id="hs-${containerId}">${isGroup?`${GU().length} عضواً <span class="dot-sep"></span> <span style="color:var(--accent2)">${onlineNow} متصلين الآن</span>`:(peerUsername?lastSeenLabel(peerUsername):subtitle)}</div>
     </div>
     <div class="chat-header-actions" onclick="event.stopPropagation()">
-      <button class="ibtn" style="width:32px;height:32px" title="بحث" onclick="toggleChatSearch('${containerId}','${key}')">🔍</button>
-      <button class="ibtn chat-theme-toggle" style="width:32px;height:32px" title="الوضع الليلي/النهاري" onclick="toggleChatTheme()">🌓</button>
+      <button class="chat-hdr-ic" title="مكالمة صوتية" onclick="chatCallStub('صوتية')">📞</button>
+      <button class="chat-hdr-ic" title="مكالمة فيديو" onclick="chatCallStub('فيديو')">🎥</button>
+      <div class="chat-hdr-more">
+        <button class="chat-hdr-ic" title="معلومات ومزيد" onclick="toggleChatHdrMore('${containerId}')">ℹ️</button>
+        <div class="chat-hdr-more-menu" id="hdrmore-${containerId}">
+          <button onclick="toggleChatHdrMore('${containerId}');${isGroup?`openGroupInfo('${containerId}')`:(peerUsername?`openUserProfile('${peerUsername}')`:'closeAllHdrMore()')}">ℹ️ معلومات المحادثة</button>
+          <button onclick="toggleChatHdrMore('${containerId}');toggleChatSearch('${containerId}','${key}')">🔍 بحث في الدردشة</button>
+          <button onclick="toggleChatHdrMore('${containerId}');toggleChatTheme()">🌓 تبديل الوضع</button>
+        </div>
+      </div>
     </div>
   </div>
   ${isGroup?`<div class="chat-members-strip" id="cms-${containerId}"></div>`:''}
@@ -2404,12 +2572,7 @@ function buildChatUI(containerId,title,subtitle,avatarText,gradientClass,sendFn,
       <div class="rp-body"><div class="rp-name" id="rpv-name-${containerId}"></div><div class="rp-text" id="rpv-text-${containerId}"></div></div>
       <button class="rp-close" onclick="cancelReply('${containerId}')">✕</button>
     </div>
-    <div class="chat-toolbar">
-      <button class="chat-tool-btn" onclick="triggerFile('fi-${containerId}')" title="إرفاق ملف">📎</button>
-      <button class="chat-tool-btn" onclick="toggleEmoji('ep-${containerId}')" title="إيموجي">😊</button>
-      <input type="file" id="fi-${containerId}" multiple style="display:none" accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar" onchange="handleFileAttach(this,'fi-${containerId}','pending-files-${containerId}')">
-      <div id="pending-files-${containerId}" style="display:flex;gap:5px;flex-wrap:wrap"></div>
-    </div>
+    <div id="pending-files-${containerId}" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:${''}6px"></div>
     <div id="ep-${containerId}" style="display:none;position:relative">
       <div class="emoji-grid">${EMOJI_LIST.map(e=>`<button onclick="appendEmoji('inp-${containerId}','${e}')">${e}</button>`).join('')}</div>
     </div>
@@ -2420,12 +2583,21 @@ function buildChatUI(containerId,title,subtitle,avatarText,gradientClass,sendFn,
       <button class="rec-cancel" onclick="cancelRecording('${containerId}')" title="إلغاء">✕</button>
       <button class="rec-send" onclick="stopRecording('${containerId}',true)" title="إرسال">➤</button>
     </div>
-    <div class="chat-input-row" id="cir-${containerId}">
-      <textarea class="chat-input" id="inp-${containerId}" placeholder="اكتب رسالتك..." rows="1"
-        onkeydown="handleComposerKeydown(event,'${containerId}')"
-        oninput="autoResize(this);handleMentionInput('${containerId}','${key}')"></textarea>
-      <button class="chat-tool-btn" id="mic-btn-${containerId}" onmousedown="startRecording('${containerId}')" ontouchstart="startRecording('${containerId}')" onmouseup="stopRecording('${containerId}',true)" ontouchend="stopRecording('${containerId}',true)" title="رسالة صوتية (اضغط مطولاً)">🎤</button>
-      <button class="send-btn" onclick="${sendFn}">➤</button>
+    <div class="chat-composer-row" id="cir-${containerId}">
+      <button class="chat-circle-btn" onclick="triggerFile('fi-${containerId}')" title="إرفاق ملف">➕</button>
+      <button class="chat-circle-btn" onclick="triggerFile('fic-${containerId}')" title="الكاميرا">📷</button>
+      <button class="chat-circle-btn" onclick="triggerFile('fig-${containerId}')" title="معرض الصور">🖼️</button>
+      <input type="file" id="fi-${containerId}" multiple style="display:none" accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar" onchange="handleFileAttach(this,'${containerId}','pending-files-${containerId}')">
+      <input type="file" id="fic-${containerId}" style="display:none" accept="image/*" capture="environment" onchange="handleFileAttach(this,'${containerId}','pending-files-${containerId}')">
+      <input type="file" id="fig-${containerId}" multiple style="display:none" accept="image/*,video/*" onchange="handleFileAttach(this,'${containerId}','pending-files-${containerId}')">
+      <div class="chat-input-row-msgr">
+        <textarea class="chat-input" id="inp-${containerId}" placeholder="اكتب رسالتك..." rows="1"
+          onkeydown="handleComposerKeydown(event,'${containerId}')"
+          oninput="autoResize(this);handleMentionInput('${containerId}','${key}');updateComposerState('${containerId}')"></textarea>
+        <button class="chat-emoji-inline" onclick="toggleEmoji('ep-${containerId}')" title="إيموجي">😊</button>
+      </div>
+      <button class="chat-circle-btn" id="mic-btn-${containerId}" onmousedown="startRecording('${containerId}')" ontouchstart="startRecording('${containerId}')" onmouseup="stopRecording('${containerId}',true)" ontouchend="stopRecording('${containerId}',true)" title="رسالة صوتية (اضغط مطولاً)">🎤</button>
+      <button class="chat-circle-btn send-active" id="send-btn-${containerId}" style="display:none" onclick="${sendFn}" title="إرسال">➤</button>
     </div>
   </div>
   <div class="lightbox" id="lb-${containerId}" onclick="closeLightbox('${containerId}')">
@@ -2437,6 +2609,7 @@ function buildChatUI(containerId,title,subtitle,avatarText,gradientClass,sendFn,
   renderPinnedBar(containerId,key);
   markChatRead(key);
   renderChatMsgs(containerId,key);
+  updateComposerState(containerId);
   startPresenceHeartbeat();
 }
 
@@ -2879,6 +3052,22 @@ function jumpToSearchHit(containerId,key,idx){
   if(wrap){const b=wrap.querySelector('.bubble');b?.classList.add('search-hit');wrap.scrollIntoView({behavior:'smooth',block:'center'})}
 }
 
+// ---- header "more" menu (info / search / theme) ----
+function toggleChatHdrMore(containerId){
+  const menu=$('hdrmore-'+containerId);if(!menu)return;
+  const wasOn=menu.classList.contains('on');
+  document.querySelectorAll('.chat-hdr-more-menu.on').forEach(m=>m.classList.remove('on'));
+  if(!wasOn)menu.classList.add('on');
+}
+function closeAllHdrMore(){document.querySelectorAll('.chat-hdr-more-menu.on').forEach(m=>m.classList.remove('on'))}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.chat-hdr-more'))closeAllHdrMore();
+});
+// ---- voice/video call icons (visual only — not yet available) ----
+function chatCallStub(type){
+  toast(`مكالمات ${type} غير متاحة حالياً في هذا الإصدار من المنصة`,'i');
+}
+
 // ---- light/dark chat theme ----
 function toggleChatTheme(){
   document.body.classList.toggle('chat-light');
@@ -3028,8 +3217,8 @@ function appendEmoji(inputId,emoji){const inp=$(inputId);if(inp){inp.value+=emoj
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
 
 window._pendingFiles={};
-function handleFileAttach(input,fileInputId,previewId){
-  const files=Array.from(input.files);const cid=fileInputId.replace('fi-','');
+function handleFileAttach(input,cid,previewId){
+  const files=Array.from(input.files);
   if(!window._pendingFiles[cid])window._pendingFiles[cid]=[];
   const preview=$(previewId);if(!preview)return;
   files.forEach(f=>{
@@ -3046,6 +3235,7 @@ function handleFileAttach(input,fileInputId,previewId){
       else chip.innerHTML=`<span>${kind==='audio'?'🎵':docIcon(f.name)} ${escHtml(f.name.slice(0,14))}</span>`;
       chip.innerHTML+=`<button class="pf-remove" onclick="removePendingFile('${cid}',${chipIdx},this)">✕</button>`;
       preview.appendChild(chip);
+      updateComposerState(cid);
     };
     reader.readAsDataURL(f);
   });
@@ -3068,6 +3258,18 @@ function removePendingFile(cid,idx,btn){
     chip.innerHTML+=`<button class="pf-remove" onclick="removePendingFile('${cid}',${i},this)">✕</button>`;
     preview.appendChild(chip);
   });
+  updateComposerState(cid);
+}
+
+// ---- toggle between mic (record) and send button depending on composer content ----
+function updateComposerState(containerId){
+  const inp=$('inp-'+containerId);
+  const mic=$('mic-btn-'+containerId);
+  const send=$('send-btn-'+containerId);
+  if(!inp||!mic||!send)return;
+  const hasContent=inp.value.trim().length>0||(window._pendingFiles&&window._pendingFiles[containerId]&&window._pendingFiles[containerId].length>0);
+  mic.style.display=hasContent?'none':'flex';
+  send.style.display=hasContent?'flex':'none';
 }
 
 // close popovers/menus when clicking elsewhere in chat
@@ -3084,13 +3286,10 @@ function renderStudentHome(){
   $('student-meta').textContent=`${CU.year||''} — ${CU.branch||''} | ${CU.email}`;
   const myProjects=GP().filter(p=>p.from===CU.username);
   const myMsgs=GM().filter(m=>m.from===CU.username||m.to===CU.username);
-  const events=GEv().filter(e=>new Date(e.date)>=new Date());
   $('st-proj-count').textContent=myProjects.length;
   $('st-msg-count').textContent=myMsgs.length;
-  $('st-event-count').textContent=events.length;
   const sugs=GSug().slice(0,3);
   $('home-suggestions').innerHTML=sugs.length?sugs.map(s=>`<div class="sug-card"><div class="sug-info"><div class="st">${s.title}</div><div class="sd">${s.desc?.slice(0,60)||''}${s.deadline?` | التسليم: ${fmt(s.deadline)}`:''}</div></div><button class="btn btn-sm btn-primary" onclick="nav('v-student-project')">عرض</button></div>`).join(''):'<div class="empty-state" style="padding:16px"><p>لا توجد مشاريع مقترحة</p></div>';
-  $('home-events').innerHTML=events.slice(0,4).map(e=>`<div class="ev-card"><div class="ev-date-badge">📅 ${fmt(e.date)}</div><div class="et">${e.title}</div><div class="ed">${e.desc||''}</div></div>`).join('')||'<div class="empty-state" style="padding:16px"><p>لا توجد مواعيد قادمة</p></div>';
 }
 
 // ============================================================
@@ -3257,38 +3456,6 @@ function submitGrade(){
   const projs=GP();projs[i].grade=g;projs[i].note=note;SP(projs);
   if(GSettings().notifyStudentOnGrade)pushNotif({to:projs[i].from,text:`⭐ تقييم مشروعك "${projs[i].title}": ${g}/20${note?' — '+note:''}`,sender:CU.username});
   closeModal('modal-grade');toast('تم التقييم بنجاح ✅');renderTeacherProjects();
-}
-
-function renderEvents(){
-  const events=GEv().filter(e=>e.from===CU.username||!e.from);
-  const el=$('events-list');if(!el)return;
-  el.innerHTML=events.length?events.map((e,i)=>`<div class="ev-card">
-    <div class="ev-date-badge">📅 ${fmt(e.date)}${e.time_val?' — ⏰ '+e.time_val:''}</div>
-    <div class="et">${e.title}</div>
-    <div class="ed">${e.desc||''}</div>
-    <button class="btn btn-sm btn-danger" style="margin-top:6px" onclick="delEvent(${i})">🗑️</button>
-  </div>`).join(''):'<div class="empty-state" style="padding:16px"><p>لا توجد مواعيد</p></div>';
-}
-
-function addEvent(){
-  const title=$('ev-title').value.trim();const date=$('ev-date').value;
-  if(!title||!date){toast('أدخل العنوان والتاريخ','e');return}
-  const events=GEv();
-  events.push({title,date,time_val:$('ev-time').value,desc:$('ev-desc').value.trim(),from:CU.username,created:now()});
-  SEv(events);renderEvents();toast('تمت إضافة الموعد ✅');
-  $('ev-title').value='';$('ev-date').value='';$('ev-time').value='';$('ev-desc').value='';
-  pushNotif({to:'all',text:`📅 موعد جديد: ${title} — ${fmt(date)}`,sender:CU.username});
-}
-function delEvent(i){showConfirm('حذف الموعد؟','',()=>{const arr=GEv();arr.splice(i,1);SEv(arr);renderEvents();toast('تم الحذف')})}
-
-function renderCalendar(elId){
-  const el=$(elId);if(!el)return;
-  const events=GEv().sort((a,b)=>new Date(a.date)-new Date(b.date));
-  el.innerHTML=events.length?events.map(e=>`<div class="ev-card">
-    <div class="ev-date-badge">📅 ${fmt(e.date)}${e.time_val?' — ⏰ '+e.time_val:''}</div>
-    <div class="et">${e.title}</div>
-    <div class="ed">${e.desc||''}</div>
-  </div>`).join(''):'<div class="empty-state" style="padding:16px"><p>لا توجد مواعيد في التقويم</p></div>';
 }
 
 // ============================================================
@@ -3931,7 +4098,7 @@ function renderWatermark(){
 }
 
 // --- 🤖 developer tab ---
-const MOD_KEYS=['modChat','modGroupChat','modProjects','modSupport','modCalendar'];
+const MOD_KEYS=['modChat','modGroupChat','modProjects','modSupport'];
 function renderDevSettings(){
   const s=GSettings();
   if($('cfg-debugMode'))$('cfg-debugMode').checked=s.debugMode;
