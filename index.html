@@ -246,6 +246,9 @@ tbody td{padding:10px 13px;font-size:.82rem;vertical-align:middle}
 .emoji-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;padding:8px;background:var(--bg3);border-radius:10px;border:1px solid var(--border);margin-bottom:5px}
 .emoji-grid button{background:none;border:none;font-size:1.15rem;cursor:pointer;padding:3px;border-radius:6px;transition:background .15s}
 .emoji-grid button:hover{background:rgba(255,255,255,.1)}
+body.compact-bubbles .chat-messages{gap:3px}
+body.compact-bubbles .bubble{padding:6px 11px;font-size:.82rem;line-height:1.35}
+body.compact-bubbles .bubble-meta{margin-top:1px}
 
 /* ===== MESSENGER-STYLE HEADER ICONS ===== */
 .chat-header-actions{display:flex;align-items:center;gap:4px;margin-right:auto}
@@ -630,6 +633,19 @@ body.chat-light .reply-quote{background:rgba(0,0,0,.05)}
   .chat-wrap{margin-bottom:0}
   .split-chat-grid{height:calc(100vh - 180px);height:calc(100dvh - 180px)}
 }
+
+/* ===== MOBILE FULLSCREEN CHAT (Messenger-style, hides top bar & bottom nav) ===== */
+@media(max-width:768px){
+  #app.mobile-chat-full .topbar{display:none}
+  #app.mobile-chat-full .mobile-bottom-nav{display:none}
+  #app.mobile-chat-full .sidebar{display:none}
+  #app.mobile-chat-full .content-area{padding:0}
+  #app.mobile-chat-full .view.on{height:100%}
+  #app.mobile-chat-full .chat-wrap{
+    height:100vh;height:100dvh;border:none;border-radius:0;margin:0;
+  }
+  #app.mobile-chat-full .chat-back-btn{display:flex}
+}
 .mbn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:var(--muted);font-size:.62rem;font-weight:700;cursor:pointer;position:relative;transition:color .15s;font-family:var(--font)}
 .mbn-item .mbi{font-size:1.2rem;line-height:1}
 .mbn-item.on{color:var(--accent)}
@@ -716,7 +732,7 @@ body.chat-light .reply-quote{background:rgba(0,0,0,.05)}
 #admin-tab-users{display:block}
 
 /* SETTINGS PAGE */
-#set-tab-security,#set-tab-privacy,#set-tab-projects,#set-tab-developer{display:none}
+#set-tab-security,#set-tab-privacy,#set-tab-projects,#set-tab-developer,#set-tab-appearance{display:none}
 #set-tab-security{display:block}
 .settings-section-title{font-size:.8rem;font-weight:800;color:var(--accent);margin:20px 0 8px;display:flex;align-items:center;gap:6px}
 .settings-section-title:first-of-type{margin-top:0}
@@ -939,7 +955,6 @@ body.screenshot-protected img{-webkit-user-drag:none;pointer-events:none}
 
       <!-- ======= GROUP CHAT ======= -->
       <div class="view" id="v-group-chat">
-        <div class="group-banner">💬 <b>الدردشة الجماعية</b> — يمكن لجميع التلاميذ والأستاذ المشاركة</div>
         <div class="chat-wrap" id="group-chat-wrap"></div>
       </div>
 
@@ -1036,7 +1051,6 @@ body.screenshot-protected img{-webkit-user-drag:none;pointer-events:none}
 
       <!-- ======= TEACHER GROUP CHAT ======= -->
       <div class="view" id="v-teacher-group-chat">
-        <div class="group-banner">💬 <b>الدردشة الجماعية</b> — قناة التواصل المشترك</div>
         <div class="chat-wrap" id="teacher-group-wrap"></div>
       </div>
 
@@ -1426,6 +1440,7 @@ body.screenshot-protected img{-webkit-user-drag:none;pointer-events:none}
           <div class="admin-tab" onclick="adminSettingsTab('privacy')">🔒 حماية الشاشة</div>
           <div class="admin-tab" onclick="adminSettingsTab('projects')">📁 المشاريع</div>
           <div class="admin-tab" onclick="adminSettingsTab('developer')">🤖 المطور</div>
+          <div class="admin-tab" onclick="adminSettingsTab('appearance')">🎨 المظهر والدردشة</div>
         </div>
 
         <!-- SECURITY TAB -->
@@ -1536,6 +1551,26 @@ body.screenshot-protected img{-webkit-user-drag:none;pointer-events:none}
             <div class="settings-note">📝 هذه الملاحظات تُسجَّل للتوثيق الداخلي فقط — لا يوجد خادم حقيقي لتنفيذها كأوامر فعلية.</div>
             <div class="fg" style="display:flex;gap:8px"><input id="devnote-input" placeholder="اكتب ملاحظة أو أمراً للتوثيق..." style="flex:1"><button class="btn btn-sm btn-primary" onclick="addDevNote()">تسجيل</button></div>
             <div id="devnotes-list" style="margin-top:8px"></div>
+          </div>
+        </div>
+
+        <!-- APPEARANCE & CHAT TAB -->
+        <div id="set-tab-appearance">
+          <div class="card">
+            <div class="card-header"><span class="card-title">📱 تجربة الدردشة على الهاتف</span><button class="btn btn-sm btn-primary" onclick="saveAppearanceSettings()">💾 حفظ</button></div>
+            <div class="settings-note info">هذه الخيارات تجعل الدردشة الجماعية أقرب لتطبيقات المراسلة (مثل ماسنجر) على شاشات الهواتف.</div>
+            <div class="set-row"><div class="set-info"><div class="set-label">وضع الشاشة الكاملة للدردشة على الهاتف</div><div class="set-desc">يخفي الشريط العلوي وشريط التنقل السفلي أثناء فتح الدردشة الجماعية، وتصبح المحادثة بعرض الشاشة كاملاً</div></div><div class="set-ctrl"><label class="tgl"><input type="checkbox" id="cfg-mobileFullscreenChat"><span class="tgl-sl"></span></label></div></div>
+            <div class="set-row"><div class="set-info"><div class="set-label">إظهار عدد الأعضاء المتصلين الآن</div><div class="set-desc">يعرض عداد "متصلين الآن" أعلى الدردشة الجماعية</div></div><div class="set-ctrl"><label class="tgl"><input type="checkbox" id="cfg-showOnlineCount"><span class="tgl-sl"></span></label></div></div>
+            <div class="set-row"><div class="set-info"><div class="set-label">مؤشر "يكتب الآن..."</div><div class="set-desc">يظهر تنبيهاً عندما يكون طرف آخر بصدد الكتابة</div></div><div class="set-ctrl"><label class="tgl"><input type="checkbox" id="cfg-showTypingIndicator"><span class="tgl-sl"></span></label></div></div>
+            <div class="set-row"><div class="set-info"><div class="set-label">فقاعات رسائل مضغوطة (Compact)</div><div class="set-desc">يقلّل المسافات بين الرسائل لعرض محادثة أطول في نفس المساحة</div></div><div class="set-ctrl"><label class="tgl"><input type="checkbox" id="cfg-compactBubbles"><span class="tgl-sl"></span></label></div></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><span class="card-title">🎨 المظهر والإشعارات</span></div>
+            <div class="set-row"><div class="set-info"><div class="set-label">الوضع الليلي التلقائي</div><div class="set-desc">يتحوّل التطبيق تلقائياً إلى الوضع الداكن مساءً (7م–6ص) والوضع الفاتح خلال النهار</div></div><div class="set-ctrl"><label class="tgl"><input type="checkbox" id="cfg-autoNightMode"><span class="tgl-sl"></span></label></div></div>
+            <div class="set-row"><div class="set-info"><div class="set-label">تنبيه صوتي عند وصول رسالة</div><div class="set-desc">يشغّل صوت تنبيه قصير عند استقبال رسالة جديدة</div></div><div class="set-ctrl"><label class="tgl"><input type="checkbox" id="cfg-chatSoundEnabled"><span class="tgl-sl"></span></label></div></div>
+            <div class="set-row"><div class="set-info"><div class="set-label">إظهار حالة "متصل الآن" و"آخر ظهور"</div><div class="set-desc">عند التعطيل، لن يرى الآخرون متى كنت متصلاً آخر مرة</div></div><div class="set-ctrl"><label class="tgl"><input type="checkbox" id="cfg-onlineStatusVisible"><span class="tgl-sl"></span></label></div></div>
+            <div class="set-row"><div class="set-info"><div class="set-label">إيصالات القراءة (✓✓)</div><div class="set-desc">يعرض علامة القراءة على الرسائل المُرسلة عند اطّلاع المستلم عليها</div></div><div class="set-ctrl"><label class="tgl"><input type="checkbox" id="cfg-readReceiptsEnabled"><span class="tgl-sl"></span></label></div></div>
           </div>
         </div>
       </div>
@@ -1811,6 +1846,10 @@ function defaultSettings(){return {
   // --- developer ---
   debugMode:false,apiKey:'',autoBackupFreq:'off',
   modChat:true,modGroupChat:true,modProjects:true,modSupport:true,
+  // --- appearance & chat (messenger-style) ---
+  mobileFullscreenChat:true,showOnlineCount:true,chatSoundEnabled:true,
+  autoNightMode:false,compactBubbles:false,showTypingIndicator:true,
+  onlineStatusVisible:true,readReceiptsEnabled:true,
 }}
 function GSettings(){return Object.assign(defaultSettings(),JSON.parse(localStorage.getItem('sch_settings')||'{}'))}
 function SSettings(v){localStorage.setItem('sch_settings',JSON.stringify(v))}
@@ -2141,6 +2180,8 @@ function afterLogin(){
   if(_forceLogoutInterval)clearInterval(_forceLogoutInterval);
   _forceLogoutInterval=setInterval(checkForceLogout,4000);
   applyScreenshotProtection();
+  applyAutoNightMode();
+  document.body.classList.toggle('compact-bubbles',!!GSettings().compactBubbles);
 }
 
 function updateTopbarUser(){
@@ -2371,7 +2412,20 @@ function nav(view){
   else if(view==='v-admin-settings') renderAdminSettings();
   closeNotif();
   if(window.innerWidth<=768)$('sidebar').classList.remove('mob-on');
+  applyMobileChatFullscreen(view);
 }
+// Views that should go edge-to-edge (Messenger-style) on phone screens
+const MOBILE_FULLSCREEN_CHAT_VIEWS=['v-group-chat','v-teacher-group-chat'];
+function applyMobileChatFullscreen(view){
+  const app=$('app');if(!app)return;
+  const s=(typeof GSettings==='function')?GSettings():{mobileFullscreenChat:true};
+  const shouldGoFull=window.innerWidth<=768 && s.mobileFullscreenChat!==false && MOBILE_FULLSCREEN_CHAT_VIEWS.includes(view);
+  app.classList.toggle('mobile-chat-full',shouldGoFull);
+}
+window.addEventListener('resize',()=>{
+  const activeView=document.querySelector('.view.on');
+  if(activeView)applyMobileChatFullscreen(activeView.id);
+});
 function nav_click(view){nav(view)}
 function navDefault(){
   if(CU.role==='student') nav('v-student-home');
@@ -2541,7 +2595,7 @@ function buildChatUI(containerId,title,subtitle,avatarText,gradientClass,sendFn,
     </div>
     <div class="chat-hinfo">
       <div class="hn">${title} ${isGroup?'🔒':''}</div>
-      <div class="hs" id="hs-${containerId}">${isGroup?`${GU().length} عضواً <span class="dot-sep"></span> <span style="color:var(--accent2)">${onlineNow} متصلين الآن</span>`:(peerUsername?lastSeenLabel(peerUsername):subtitle)}</div>
+      <div class="hs" id="hs-${containerId}">${isGroup?`${GU().length} عضواً${GSettings().showOnlineCount?` <span class="dot-sep"></span> <span style="color:var(--accent2)">${onlineNow} متصلين الآن</span>`:''}`:(peerUsername?(GSettings().onlineStatusVisible?lastSeenLabel(peerUsername):''):subtitle)}</div>
     </div>
     <div class="chat-header-actions" onclick="event.stopPropagation()">
       <button class="chat-hdr-ic" title="مكالمة صوتية" onclick="chatCallStub('صوتية')">📞</button>
@@ -2872,6 +2926,7 @@ function stringToColor(str){
 function seenTickHtml(m,key,inOverlay){
   // status: sent -> delivered -> read (locally simulated read receipt once the
   // recipient/group view has been opened on this device)
+  if(!GSettings().readReceiptsEnabled)return `<span class="seen-ticks" style="${inOverlay?'':'color:inherit'}">✓</span>`;
   const status=m.status||'sent';
   const icon=status==='read'?'✓✓':(status==='delivered'?'✓✓':'✓');
   const cls=status==='read'?'read':'';
@@ -3308,7 +3363,7 @@ function buildStudentPrivateChat(){
 // ============================================================
 function buildGroupChat(containerId){
   buildChatUI(containerId,'الدردشة الجماعية','مفتوحة للجميع','👥','linear-gradient(135deg,var(--accent2),#059669)',
-    `sendChatMsg('${containerId}','sch_group_main','group')`,'sch_group_main',null,{isGroup:true});
+    `sendChatMsg('${containerId}','sch_group_main','group')`,'sch_group_main','navDefault()',{isGroup:true});
 }
 
 // ============================================================
@@ -3995,11 +4050,12 @@ function collectSettingsList(defs){
 
 function renderAdminSettings(){
   document.querySelectorAll('#settings-tabs .admin-tab').forEach((t,i)=>t.classList.toggle('on',i===0));
-  ['security','privacy','projects','developer'].forEach(t=>{const el=$('set-tab-'+t);if(el)el.style.display=t==='security'?'block':'none'});
+  ['security','privacy','projects','developer','appearance'].forEach(t=>{const el=$('set-tab-'+t);if(el)el.style.display=t==='security'?'block':'none'});
   renderSettingsList('set-list-security',SEC_DEFS);
   renderSettingsList('set-list-projects',PROJ_DEFS);
   renderPrivacySettings();
   renderDevSettings();
+  renderAppearanceSettings();
   renderBackupsList();
   renderErrorLogList();
   renderDevNotesList();
@@ -4007,7 +4063,7 @@ function renderAdminSettings(){
 }
 function adminSettingsTab(tab){
   document.querySelectorAll('#settings-tabs .admin-tab').forEach(t=>t.classList.remove('on'));
-  ['security','privacy','projects','developer'].forEach(t=>{const el=$('set-tab-'+t);if(el)el.style.display='none'});
+  ['security','privacy','projects','developer','appearance'].forEach(t=>{const el=$('set-tab-'+t);if(el)el.style.display='none'});
   $('set-tab-'+tab).style.display='block';
   if(typeof event!=='undefined'&&event.target)event.target.classList.add('on');
 }
@@ -4117,6 +4173,48 @@ function saveDevSettings(){
   toast('تم حفظ إعدادات المطور والوحدات ✅');
   pushActivity({user:CU.username,name:CU.name,role:CU.role,action:'تحديث إعدادات المطور والوحدات البرمجية'});
 }
+// --- 🎨 appearance & chat (messenger-style) tab ---
+const APPEARANCE_KEYS=['mobileFullscreenChat','showOnlineCount','showTypingIndicator','compactBubbles','autoNightMode','chatSoundEnabled','onlineStatusVisible','readReceiptsEnabled'];
+function renderAppearanceSettings(){
+  const s=GSettings();
+  APPEARANCE_KEYS.forEach(k=>{if($('cfg-'+k))$('cfg-'+k).checked=!!s[k]});
+}
+function saveAppearanceSettings(){
+  const s=GSettings();
+  APPEARANCE_KEYS.forEach(k=>{if($('cfg-'+k))s[k]=$('cfg-'+k).checked});
+  SSettings(s);
+  document.body.classList.toggle('compact-bubbles',s.compactBubbles);
+  applyAutoNightMode();
+  const activeView=document.querySelector('.view.on');
+  if(activeView)applyMobileChatFullscreen(activeView.id);
+  toast('تم حفظ إعدادات المظهر والدردشة ✅');
+  pushActivity({user:CU.username,name:CU.name,role:CU.role,action:'تحديث إعدادات المظهر والدردشة'});
+}
+// --- auto night mode: switches dark/light theme based on time of day ---
+let _autoNightInterval=null;
+function applyAutoNightMode(){
+  const s=GSettings();
+  if(!s.autoNightMode){if(_autoNightInterval){clearInterval(_autoNightInterval);_autoNightInterval=null}return}
+  const run=()=>{const h=new Date().getHours();setAppearanceMode((h>=19||h<6)?'dark':'light')};
+  run();
+  if(!_autoNightInterval)_autoNightInterval=setInterval(run,10*60*1000);
+}
+// --- chat notification sound (best-effort, fires on cross-tab message updates) ---
+function playChatMsgSound(){
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+    const ctx=new AC();const o=ctx.createOscillator();const g=ctx.createGain();
+    o.type='sine';o.frequency.value=880;g.gain.value=0.05;
+    o.connect(g);g.connect(ctx.destination);o.start();
+    setTimeout(()=>{o.stop();ctx.close&&ctx.close()},160);
+  }catch(_){}
+}
+window.addEventListener('storage',e=>{
+  if(e.key==='sch_msgs'&&typeof CU!=='undefined'&&CU){
+    const s=GSettings();
+    if(s.chatSoundEnabled)playChatMsgSound();
+  }
+});
 function generateApiKey(){
   const key='sk_'+Math.random().toString(36).slice(2,10)+Math.random().toString(36).slice(2,10);
   const s=GSettings();s.apiKey=key;SSettings(s);if($('api-key-display'))$('api-key-display').value=key;
